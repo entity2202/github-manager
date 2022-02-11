@@ -21,5 +21,4 @@ module.exports = (client, message) => {
     // Deployements
     // Collaborators
     // Branches
-    //
 }
