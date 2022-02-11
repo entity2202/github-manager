@@ -12,6 +12,4 @@ for (file of eventFiles) {
     client.on(eventName, (...args) => event(client, ...args))
 }
 
-global.fetch = require("node-fetch")
-
 client.login(token)
