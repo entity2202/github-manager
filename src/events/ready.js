@@ -11,24 +11,41 @@ module.exports = (client) => {
 
 
     app.post('/payload', (req, res) => {
-        const { body } = req
+        const { body } = req;
+        console.log(body);
 
-        /*
-        console.log(body.head_commit)
-        client.channels.cache.get("924792134702366750").send({
-            content: `Message: \`${body.head_commit.message}\`\nAuthor: \`${body.head_commit.author.name}\``
-        })
-         */
-        let commit = new MessageEmbed()
-            .setTitle(`New commit!`)
-            .addField(`Message`, `\`${body.head_commit.message}\``)
-            .addField(`Author`, `\`${body.head_commit.author.username}\``)
-            .addField(`Modified file`, `\`${body.head_commit.modified}\``)
-            .addField(`URL`, `[\`Click\`](${body.head_commit.url})`)
-            .setColor(`BLUE`)
-        client.channels.cache.get("924792134702366750").send({ embeds: [commit] })
-
-        //TODO: all events from list https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
+        if (body.head_commit) {
+            let commit = new MessageEmbed()
+                .setTitle(`New commit!`)
+                .addField(`Message`, `\`${body.head_commit.message}\``, true)
+                .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
+                .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
+                .addField(`URL`, `[\`Click\`](${body.head_commit.url})`, true)
+                .setColor(`BLUE`)
+            client.channels.cache.get("898284496384839721").send({embeds: [commit]})
+        } else if (body.action === "opened") {
+            let issue = new MessageEmbed()
+                .setTitle(`(${body.repository.full_name}) Issue opened!`)
+                .setDescription(`${body.issue.body}`)
+                .addField(`Action`, `\`${body.action}\``, true)
+                .addField(`Title`, `\`${body.issue.title}\``, true)
+                .addField(`Opened issues`, `\`${body.issue.number}\``, true)
+                .addField(`Author`, `\`${body.issue.user.login}\``, true)
+                .setColor(`GREEN`)
+            client.channels.cache.get("898284496384839721").send({embeds: [issue]})
+        } else if (body.action === "closed") {
+            let issueClosed = new MessageEmbed()
+                .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
+                .setColor(`RED`)
+            client.channels.cache.get("898284496384839721").send({embeds: [issueClosed]})
+        } else if (body.forkee) {
+            let fork = new MessageEmbed()
+                .setTitle(`New fork/Pull request!`)
+                .addField(`Author`, `\`${body.forkee.owner.login}\``)
+                .addField(`Repo name`, `\`${body.forkee.full_name}\``)
+                .setColor(`GREEN`)
+            client.channels.cache.get("898284496384839721").send({embeds: [fork]})
+        }
     })
 
     app.get('/test', (req, res) => res.send('Hello World!'))
