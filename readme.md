@@ -1,1 +1,1 @@
-https://discord.gg/2dbCX8rR
+https://discord.gg/fGbVxyGfJX
