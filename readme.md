@@ -1,1 +1,1 @@
-nice test 2 lol 
+https://discord.gg/2dbCX8rR
