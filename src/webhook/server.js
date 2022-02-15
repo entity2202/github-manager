@@ -14,21 +14,18 @@ module.exports = (client) => {
 
         // Commits
         if (body.head_commit) {
-
             let d = [];
             for (let i in body.commits) {
                 d.push(body.commits[i].message)
             };
-
             let commit = new MessageEmbed()
-                .setTitle(`(${body.repository.full_name}) New commits (${d.length})`)
-                .addField(`Message(s)`, `\`${d.join(",\n")}\``, true)
+                .setTitle(`${body.repository.full_name}: New commits (${d.length})`)
+                .addField(`Message(s)`, `${d.join(",\n")}`, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
                 .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
                 .addField(`URL`, `[\`Click\`](${body.head_commit.url})`, true)
                 .setColor(`BLUE`)
             client.channels.cache.get(channelID).send({embeds: [commit]})
-
             // Issues: Opened
         } else if (body.action === "opened") {
             let issue = new MessageEmbed()
@@ -46,7 +43,7 @@ module.exports = (client) => {
             let issueClosed = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
                 .setColor(`RED`)
-            client.channels.cache.get("898284496384839721").send({embeds: [issueClosed]})
+            client.channels.cache.get(channelID).send({embeds: [issueClosed]})
 
             // Forks
         } else if (body.forkee) {
