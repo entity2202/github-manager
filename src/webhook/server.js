@@ -14,17 +14,22 @@ module.exports = (client) => {
 
         // Commits
         if (body.head_commit) {
-            let d = [];
+            let commitList = [];
             for (let i in body.commits) {
-                d.push(body.commits[i].message)
+                commitList.push(body.commits[i].message)
+            };
+
+            let fileList = [];
+            for (let i in body.head_commit) {
+                fileList.push(body.head_commit[i].modified)
             };
 
             let commit = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) New commits [${d.length}]`)
                 .setDescription(`Changes, full informations: ${body.head_commit.url}`)
-                .addField(`Message(s)`, `${d.join(",\n")}`, true)
+                .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
-                .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
+                .addField(`Modified file(s)`, `\`${fileList.join(",\n")}\``, true)
                 .setColor(`GREEN`)
             client.channels.cache.get(channelID).send({ embeds: [commit] })
             // Issues: Opened
