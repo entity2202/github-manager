@@ -10,7 +10,7 @@ module.exports = (client) => {
         const { body } = req;
         console.log(body);
 
-        const channelID = "924792134702366750";
+        const channelID = "943261043415720026";
 
         // Commits
         if (body.head_commit) {
@@ -20,7 +20,7 @@ module.exports = (client) => {
             };
 
             let commit = new MessageEmbed()
-                .setTitle(`${body.repository.full_name}: New commits (${d.length})`)
+                .setTitle(`${body.repository.full_name}: New commits [${d.length}]`)
                 .addField(`Message(s)`, `${d.join(",\n")}`, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
                 .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
@@ -28,7 +28,7 @@ module.exports = (client) => {
                 .setColor(`BLUE`)
             client.channels.cache.get(channelID).send({ embeds: [commit] })
             // Issues: Opened
-        } else if (body.action === "opened") {
+        } else if (body.issue.state === "open") {
             let issue = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue opened!`)
                 .setDescription(`${body.issue.body}`)
@@ -40,7 +40,7 @@ module.exports = (client) => {
             client.channels.cache.get(channelID).send({ embeds: [issue] })
 
             // Issues: Closed
-        } else if (body.action === "closed") {
+        } else if (body.issue.state === "closed") {
             let issueClosed = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
                 .setColor(`RED`)
@@ -54,6 +54,24 @@ module.exports = (client) => {
                 .addField(`Repo name`, `\`${body.forkee.full_name}\``)
                 .setColor(`GREEN`)
             client.channels.cache.get(channelID).send({ embeds: [fork] })
+        } else if (body.project.state === "open") {
+            let projectOpen = new MessageEmbed()
+                .setTitle(`Project opened!`)
+                .addField(`Name`, `${body.project.name}`)
+                .addField(`Description`, `${body.project.body}`)
+                .addField(`Opened by`, `${body.project.creator.login}`)
+                .addField(`Number`, `${body.project.number}`)
+                .setColor(`GREEN`)
+            client.channels.cache.get(channelID).send({ embeds: [projectOpen] })
+        } else if (body.project.state === "closed") {
+            let projectClosed = new MessageEmbed()
+                .setTitle(`Project closed!`)
+                .addField(`Name`, `${body.project.name}`)
+                .addField(`Description`, `${body.project.body}`)
+                .addField(`Closed by`, `${body.project.creator.login}`)
+                .addField(`Number`, `${body.project.number}`)
+                .setColor(`RED`)
+            client.channels.cache.get(channelID).send({ embeds: [projectClosed] })
         }
     })
 
