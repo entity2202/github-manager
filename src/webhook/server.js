@@ -20,7 +20,7 @@ module.exports = (client) => {
             };
 
             let commit = new MessageEmbed()
-                .setTitle(`${body.repository.full_name}: New commits [${d.length}]`)
+                .setTitle(`(${body.repository.full_name}) New commits [${d.length}]`)
                 .setDescription(`Changes, full informations: ${body.head_commit.url}`)
                 .addField(`Message(s)`, `${d.join(",\n")}`, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
@@ -45,7 +45,6 @@ module.exports = (client) => {
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
                 .setColor(`RED`)
             client.channels.cache.get(channelID).send({ embeds: [issueClosed] })
-
             // Forks
         } else if (body.forkee) {
             let fork = new MessageEmbed()
