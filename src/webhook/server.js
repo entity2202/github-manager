@@ -24,7 +24,7 @@ module.exports = (client) => {
                 .setDescription(`Changes, full informations: ${body.head_commit.url}`)
                 .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
-                .addField(`Modified file(s)`, `\`${body.head_commit[i].modified.join(",\n")}\``, true)
+                .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
                 .setColor(`GREEN`)
             client.channels.cache.get(channelID).send({ embeds: [commit] })
             // Issues: Opened
