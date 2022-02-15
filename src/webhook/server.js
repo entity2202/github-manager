@@ -25,7 +25,7 @@ module.exports = (client) => {
             };
 
             let commit = new MessageEmbed()
-                .setTitle(`(${body.repository.full_name}) New commits [${d.length}]`)
+                .setTitle(`(${body.repository.full_name}) New commits [${commitList.length}]`)
                 .setDescription(`Changes, full informations: ${body.head_commit.url}`)
                 .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
                 .addField(`Author`, `\`${body.head_commit.author.username}\``, true)
