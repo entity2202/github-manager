@@ -3,6 +3,7 @@ const { readdirSync } = require('fs');
 const { token } = require("./config.json");
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+require("./webhook/server")(client);
 
 const eventFiles = readdirSync('./events').filter(file => file.endsWith('.js'));
 
