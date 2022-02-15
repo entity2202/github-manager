@@ -18,6 +18,7 @@ module.exports = (client) => {
             for (let i in body.commits) {
                 d.push(body.commits[i].message)
             };
+
             let commit = new MessageEmbed()
                 .setTitle(`${body.repository.full_name}: New commits (${d.length})`)
                 .addField(`Message(s)`, `${d.join(",\n")}`, true)
@@ -25,7 +26,7 @@ module.exports = (client) => {
                 .addField(`Modified file(s)`, `\`${body.head_commit.modified.join(",\n")}\``, true)
                 .addField(`URL`, `[\`Click\`](${body.head_commit.url})`, true)
                 .setColor(`BLUE`)
-            client.channels.cache.get(channelID).send({embeds: [commit]})
+            client.channels.cache.get(channelID).send({ embeds: [commit] })
             // Issues: Opened
         } else if (body.action === "opened") {
             let issue = new MessageEmbed()
@@ -36,14 +37,14 @@ module.exports = (client) => {
                 .addField(`Opened issues`, `\`${body.issue.number}\``, true)
                 .addField(`Author`, `\`${body.issue.user.login}\``, true)
                 .setColor(`GREEN`)
-            client.channels.cache.get(channelID).send({embeds: [issue]})
+            client.channels.cache.get(channelID).send({ embeds: [issue] })
 
             // Issues: Closed
         } else if (body.action === "closed") {
             let issueClosed = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
                 .setColor(`RED`)
-            client.channels.cache.get(channelID).send({embeds: [issueClosed]})
+            client.channels.cache.get(channelID).send({ embeds: [issueClosed] })
 
             // Forks
         } else if (body.forkee) {
@@ -52,7 +53,7 @@ module.exports = (client) => {
                 .addField(`Author`, `\`${body.forkee.owner.login}\``)
                 .addField(`Repo name`, `\`${body.forkee.full_name}\``)
                 .setColor(`GREEN`)
-            client.channels.cache.get(channelID).send({embeds: [fork]})
+            client.channels.cache.get(channelID).send({ embeds: [fork] })
         }
     })
 
