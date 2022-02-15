@@ -28,7 +28,7 @@ module.exports = (client) => {
                 .setColor(`GREEN`)
             client.channels.cache.get(channelID).send({ embeds: [commit] })
             // Issues: Opened
-        } else if (body.issue.state === "open") {
+        } else if (body.action === "opened") {
             let issue = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue opened!`)
                 .setDescription(`${body.issue.body}`)
@@ -40,7 +40,7 @@ module.exports = (client) => {
             client.channels.cache.get(channelID).send({ embeds: [issue] })
 
             // Issues: Closed
-        } else if (body.issue.state === "closed") {
+        } else if (body.action === "closed") {
             let issueClosed = new MessageEmbed()
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${body.issue.title}`)
                 .setColor(`RED`)
