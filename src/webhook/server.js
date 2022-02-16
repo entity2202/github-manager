@@ -16,19 +16,20 @@ module.exports = (client) => {
         if (commits) {
             let commitList = [];
             for (let i in commits) {
-                commits.push(commits[i].message)
+                commitList.push(commits[i].message)
             };
 
             let commit = new MessageEmbed()
+                .setAuthor({ name: body.sender.login, iconURL: body.sender.avatar_url })
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
                 .setDescription(`Changes, full informations: https://github.com/Skyndalex/github-manager/commit/${after}`)
-                .addField(`Message(s)`, `\`${commitList.join(",\n") || "None"}\``, true)
-                .addField(`Author`, `\`${pusher.name}\``, true)
+                .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
                 .addField(`Modified file(s)`, `\`${head_commit.modified.join(",\n") || "None"}\``, true)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [commit]})
         } else if (issue?.state === "open") {
             let issueEmbed = new MessageEmbed()
+                .setAuthor({ name: body.sender.login, iconURL: body.sender.avatar_url })
                 .setTitle(`(${repository.full_name}) Issue opened!`)
                 .setDescription(`${issue.body}`)
                 .addField(`Title`, `\`${issue.title}\``, true)
@@ -38,15 +39,27 @@ module.exports = (client) => {
             await client.channels.cache.get(channelID).send({ embeds: [issueEmbed] })
         } else if (issue?.state === "closed") {
             let issueClosed = new MessageEmbed()
+                .setAuthor({ name: body.sender.login, iconURL: body.sender.avatar_url })
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${issue.title}`)
                 .setColor(`RED`)
             await client.channels.cache.get(channelID).send({embeds: [issueClosed]})
         } else if (pull_request?.state === "open") {
             let pulLRequestNew = new MessageEmbed()
-                .setTitle(`(${repository.full_name}) New pull request #${pull_request.title} by ${pull_request.user.login}`)
+                .setAuthor({ name: body.sender.login, iconURL: body.sender.avatar_url })
+                .setTitle(`(${repository.full_name}) New pull request #${pull_request.title}`)
                 .setURL(pull_request.html_url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [pulLRequestNew]})
+        } else if (pull_request?.state === "closed") {
+            let pullRequestClosed = new MessageEmbed()
+                .setAuthor({
+                    name: body.sender.login,
+                    iconURL: body.sender.avatar_url
+                })
+                .setTitle(`(${repository.full_name}) Closed pull request #${pull_request.title}`)
+                .setURL(pull_request.html_url)
+                .setColor(`RED`)
+            await client.channels.cache.get(channelID).send({embeds: [pullRequestClosed]})
         }
     })
     app.get('/test', (req, res) => res.send('Hello World!'))
